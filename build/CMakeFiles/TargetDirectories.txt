@@ -1,0 +1,3 @@
+/home/beams/NMARKS/devel/pvtui-ur/build/CMakeFiles/pvtui_ur.dir
+/home/beams/NMARKS/devel/pvtui-ur/build/CMakeFiles/edit_cache.dir
+/home/beams/NMARKS/devel/pvtui-ur/build/CMakeFiles/rebuild_cache.dir
