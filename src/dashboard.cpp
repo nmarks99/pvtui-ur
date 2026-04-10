@@ -1,6 +1,16 @@
 #include "dashboard.hpp"
 
-Dashboard::Dashboard(pvtui::App& app, const std::string& prefix) :
+using namespace ftxui;
+using namespace pvtui;
+
+Element render_rbv(WidgetBase& w, const std::string& label = "") {
+    return hbox({
+        label.length() ? text(label) : emptyElement(),
+        w.component()->Render() | EPICSColor::custom(w, color(Color::Blue))
+    });
+}
+
+Dashboard::Dashboard(App& app, const std::string& prefix) :
     prefix(prefix),
     mode(app, prefix + "Dashboard:RobotMode.VAL"),
     safety_str(app, prefix + "Dashboard:SafetyStatus.VAL"),
@@ -8,47 +18,72 @@ Dashboard::Dashboard(pvtui::App& app, const std::string& prefix) :
     remote(app, prefix + "Dashboard:IsInRemoteControl.RVAL"),
     safety(app, prefix + "Dashboard:SafetyStatus.VAL"),
     prog(app, prefix + "Dashboard:LoadedProgram.VAL"),
-    progstate(app, prefix + "Dashboard:ProgramState.VAL")
+    progstate(app, prefix + "Dashboard:ProgramState.VAL"),
+    connect(app, prefix + "Dashboard:Connect.PROC",       " Connect    ", ButtonOption::Simple()),
+    disconnect(app, prefix + "Dashboard:Disconnect.PROC", " Disconnect ", ButtonOption::Simple()),
+    poweron(app, prefix + "Dashboard:PowerOn.PROC",       " On  ", ButtonOption::Simple()),
+    poweroff(app, prefix + "Dashboard:PowerOff.PROC",     " Off ", ButtonOption::Simple()),
+    play(app, prefix + "Dashboard:Play.PROC",     "  "),
+    pause(app, prefix + "Dashboard:Pause.PROC",   "  "),
+    stop(app, prefix + "Dashboard:Stop.PROC",     "  "),
+    urp(app, prefix + "Dashboard:LoadURP.VAL", PVPutType::String, Color::Black, Color::White)
 {
 
-    using namespace ftxui;
-    using namespace pvtui;
+    auto container = Container::Vertical({
+        poweron.component(),
+        poweroff.component(),
+        connect.component(),
+        disconnect.component(),
+        urp.component(),
+        play.component(),
+        pause.component(),
+        stop.component(),
+    });
 
-    auto readback_style = [](const WidgetBase& w){
-        return EPICSColor::custom(w, color(Color::Blue));
-    };
-
-    auto container = Container::Vertical({});
     container |= Renderer([&](Element){
         return vbox({
+            hbox({
+                vbox({
+                    text("[   TODO    ]"),
+                    text("[   TODO    ]"),
+                    text("[   TODO    ]"),
+                    text("[   TODO    ]"),
+                }),
 
-            vbox({
-                text(prog.value()) | readback_style(remote),
-                text(progstate.value()) | readback_style(remote),
+                filler(),
+
+                vbox({
+                    hbox({
+                        poweron.component()->Render(),
+                        separatorEmpty(),
+                        poweroff.component()->Render()
+                    }),
+                    connect.component()->Render(),
+                    disconnect.component()->Render(),
+                }),
             }) | border,
 
             vbox({
+                render_rbv(prog),
+                render_rbv(progstate),
                 hbox({
-                    text(" Connected: "),
-                    text(connected.value()) | readback_style(connected),
-                }),
-                hbox({
-                    text("    Remote: "),
-                    text(remote.value()) |  readback_style(remote),
-                }),
-                hbox({
-                    text("Robot Mode: "),
-                    text(mode.value()) | readback_style(mode),
-                }),
-                hbox({
-                    text("    Safety: "),
-                    text(safety.value()) | readback_style(safety),
+                    urp.component()->Render() | bgcolor(Color::GrayLight) | flex,
+                    separatorEmpty(),
+                    play.component()->Render(),
+                    pause.component()->Render(),
+                    stop.component()->Render(),
                 })
+            }) | border,
+
+            vbox({
+                render_rbv(connected, " Connected: "),
+                render_rbv(remote,    "    Remote: "),
+                render_rbv(mode,      "Robot Mode: "),
+                render_rbv(safety,    "    Safety: "),
             }) | border
 
-        }) | size(WIDTH, EQUAL, 50);
+        }) | size(WIDTH, EQUAL, 40);
     });
 
     Add(container);
-
 }

@@ -14,4 +14,12 @@ class Dashboard : public ftxui::ComponentBase {
     pvtui::Monitor<std::string> safety;
     pvtui::Monitor<std::string> prog;
     pvtui::Monitor<std::string> progstate;
+    pvtui::ButtonWidget connect;
+    pvtui::ButtonWidget disconnect;
+    pvtui::ButtonWidget poweron;
+    pvtui::ButtonWidget poweroff;
+    pvtui::ButtonWidget play;
+    pvtui::ButtonWidget pause;
+    pvtui::ButtonWidget stop;
+    pvtui::InputWidget urp;
 };
