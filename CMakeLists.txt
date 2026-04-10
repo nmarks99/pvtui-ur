@@ -11,5 +11,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(pvtui REQUIRED)
 
 # Add exectuble and link libraries
-add_executable(pvtui_ur src/main.cpp src/dashboard.cpp)
+add_executable(pvtui_ur
+    src/main.cpp
+    src/dashboard.cpp
+    src/status.cpp
+    src/control.cpp
+)
 target_link_libraries(pvtui_ur PRIVATE pvtui::pvtui)
