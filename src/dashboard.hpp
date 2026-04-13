@@ -1,3 +1,4 @@
+#pragma once
 #include <ftxui/component/component.hpp>
 #include <pvtui/pvtui.hpp>
 
@@ -9,8 +10,8 @@ class Dashboard : public ftxui::ComponentBase {
   private:
     pvtui::Monitor<std::string> mode;
     pvtui::Monitor<std::string> safety_str;
-    pvtui::Monitor<std::string> connected;
-    pvtui::Monitor<std::string> remote;
+    pvtui::Monitor<int> connected;
+    pvtui::Monitor<int> remote;
     pvtui::Monitor<std::string> safety;
     pvtui::Monitor<std::string> prog;
     pvtui::Monitor<std::string> progstate;

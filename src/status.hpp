@@ -1,3 +1,4 @@
+#pragma once
 #include <ftxui/component/component.hpp>
 #include <pvtui/pvtui.hpp>
 

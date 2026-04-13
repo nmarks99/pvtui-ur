@@ -1,6 +1,6 @@
+#pragma once
 #include <ftxui/component/component.hpp>
 #include <pvtui/pvtui.hpp>
-
 
 class ControlAxis : public ftxui::ComponentBase {
   public:
@@ -11,6 +11,7 @@ class ControlAxis : public ftxui::ComponentBase {
     pvtui::ButtonWidget twr;
     pvtui::ButtonWidget twf;
     pvtui::Monitor<std::string> rbv;
+    pvtui::Monitor<std::string> egu;
 };
 
 class Control : public ftxui::ComponentBase {
@@ -37,4 +38,18 @@ class Control : public ftxui::ComponentBase {
     pvtui::ButtonWidget stopl;
     pvtui::ButtonWidget movej;
     pvtui::ButtonWidget movel;
+    pvtui::ButtonWidget disconnect;
+    pvtui::ButtonWidget reconnect;
+    pvtui::ButtonWidget stop_ctrl_script;
+    pvtui::ButtonWidget reupload_ctrl_script;
+    pvtui::ButtonWidget stop;
+    pvtui::InputWidget tcp_offset_x;
+    pvtui::InputWidget tcp_offset_y;
+    pvtui::InputWidget tcp_offset_z;
+    pvtui::InputWidget tcp_offset_roll;
+    pvtui::InputWidget tcp_offset_pitch;
+    pvtui::InputWidget tcp_offset_yaw;
+    pvtui::ChoiceWidget teach;
+    pvtui::Monitor<int> connected;
+    pvtui::Monitor<pvtui::PVEnum> moving;
 };

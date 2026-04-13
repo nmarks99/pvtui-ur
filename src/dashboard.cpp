@@ -1,14 +1,8 @@
+#include "common.hpp"
 #include "dashboard.hpp"
 
 using namespace ftxui;
 using namespace pvtui;
-
-inline Element labelled_rbv(WidgetBase& w, const std::string& label = "") {
-    return hbox({
-        label.length() ? text(label) : emptyElement(),
-        w.component()->Render() | EPICSColor::custom(w, color(Color::Blue))
-    });
-}
 
 Dashboard::Dashboard(pvtui::App& app, const std::string& prefix) :
     prefix(prefix),
@@ -28,7 +22,7 @@ Dashboard::Dashboard(pvtui::App& app, const std::string& prefix) :
     shutdown(app, prefix + "Dashboard:Shutdown.PROC",                    "      Shutdown      ", ButtonOption::Simple()),
     close_popup(app, prefix + "Dashboard:ClosePopup.PROC",               "    Close Popup     ", ButtonOption::Simple()),
     close_safety_popup(app, prefix + "Dashboard:CloseSafetyPopup.PROC",  " Close Safety Popup ", ButtonOption::Simple()),
-    release_brakes(app, prefix + "Dashboard:ReleaseBrakes.PROC",         "   Release Brakes   ", ButtonOption::Simple()),
+    release_brakes(app, prefix + "Dashboard:BrakeRelease.PROC",         "   Release Brakes   ", ButtonOption::Simple()),
     restart_safety(app, prefix + "Dashboard:RestartSafety.PROC",         "   Restart Safety   ", ButtonOption::Simple()),
     unlock_prot_stop(app, prefix + "Dashboard:UnlockProtectiveStop.PROC","  Unlock Prot. Stop ", ButtonOption::Simple()),
     play(app, prefix + "Dashboard:Play.PROC",     "  "),
@@ -81,7 +75,7 @@ Dashboard::Dashboard(pvtui::App& app, const std::string& prefix) :
                 labelled_rbv(prog),
                 labelled_rbv(progstate),
                 hbox({
-                    urp.component()->Render() | bgcolor(Color::GrayLight) | flex,
+                    urp.component()->Render() | edit_style(urp) | flex,
                     separatorEmpty(),
                     play.component()->Render(),
                     pause.component()->Render(),
@@ -91,8 +85,20 @@ Dashboard::Dashboard(pvtui::App& app, const std::string& prefix) :
 
             // Status
             vbox({
-                labelled_rbv(connected,         " Connected: "),
-                labelled_rbv(remote,            "    Remote: "),
+                hbox({
+                    text(" Connected: "),
+                    connected.value()
+                        ? text("") | color(Color::Green)
+                        : text("") | color(Color::Red)
+                }),
+                hbox({
+                    text("    Remote: "),
+                    remote.value()
+                        ? text("") | color(Color::Green)
+                        : text("") | color(Color::Red)
+                }),
+                // labelled_rbv(connected,         " Connected: "),
+                // labelled_rbv(remote,            "    Remote: "),
                 labelled_rbv(mode,              "Robot Mode: "),
                 labelled_rbv(safety,            "    Safety: "),
                 labelled_rbv(polyscope_version, " Polyscope: "),

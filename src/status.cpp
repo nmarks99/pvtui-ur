@@ -1,14 +1,8 @@
+#include "common.hpp"
 #include "status.hpp"
 
 using namespace pvtui;
 using namespace ftxui;
-
-inline Element labelled_rbv(WidgetBase& w, const std::string& label = "") {
-    return hbox({
-        label.length() ? text(label) : emptyElement(),
-        w.component()->Render() | EPICSColor::custom(w, color(Color::Blue))
-    });
-}
 
 Status::Status(pvtui::App& app, const std::string& prefix)
     : prefix(prefix),
@@ -43,12 +37,15 @@ Status::Status(pvtui::App& app, const std::string& prefix)
             (connected.value()
                  ? text("Connected") | color(Color::Green)
                  : text("Disconnected") | color(Color::Red)) | bold,
-            reconnect.component()->Render()
-                | bgcolor(Color::SteelBlue) | color(Color::Black)
-                | size(WIDTH, EQUAL, 12),
-            disconnect.component()->Render()
-                | bgcolor(Color::SteelBlue) | color(Color::Black)
-                | size(WIDTH, EQUAL, 12),
+            hbox({
+                reconnect.component()->Render()
+                    | edit_style(reconnect)
+                    | size(WIDTH, EQUAL, 14),
+                separatorEmpty(),
+                disconnect.component()->Render()
+                    | edit_style(disconnect)
+                    | size(WIDTH, EQUAL, 14)
+            }),
 
             labelled_rbv(uptime, "Uptime: "),
             labelled_rbv(runtime_state, "Runtime state: "),
