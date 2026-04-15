@@ -70,6 +70,13 @@ IOTab::IOTab(pvtui::App& app, const std::string& prefix)
             return vbox({choices.component()->Render()...});
         };
 
+        auto channel_labels = [](size_t n) {
+            Elements rows;
+            for (size_t i = 0; i < n; i++)
+                rows.push_back(text(std::to_string(i) + ":"));
+            return vbox(rows);
+        };
+
         auto outputs_section = vbox({
             text("Standard:") | bold,
             hbox({
@@ -77,6 +84,7 @@ IOTab::IOTab(pvtui::App& app, const std::string& prefix)
                               do_standard3, do_standard4, do_standard5,
                               do_standard6, do_standard7),
                 separatorEmpty(),
+                channel_labels(8),
                 do_standard_bits.component()->Render(),
             }),
             separatorEmpty(),
@@ -86,6 +94,7 @@ IOTab::IOTab(pvtui::App& app, const std::string& prefix)
                               do_config3, do_config4, do_config5,
                               do_config6, do_config7),
                 separatorEmpty(),
+                channel_labels(8),
                 do_config_bits.component()->Render(),
             }),
             separatorEmpty(),
@@ -93,19 +102,29 @@ IOTab::IOTab(pvtui::App& app, const std::string& prefix)
             hbox({
                 do_choice_col(do_tool0, do_tool1),
                 separatorEmpty(),
+                channel_labels(2),
                 do_tool_bits.component()->Render(),
             }),
         });
 
         auto inputs_section = vbox({
             text("Standard:") | bold,
-            di_standard_bits.component()->Render(),
+            hbox({
+                channel_labels(8),
+                di_standard_bits.component()->Render(),
+            }),
             separatorEmpty(),
             text("Configurable:") | bold,
-            di_config_bits.component()->Render(),
+            hbox({
+                channel_labels(8),
+                di_config_bits.component()->Render(),
+            }),
             separatorEmpty(),
             text("Tool:") | bold,
-            di_tool_bits.component()->Render(),
+            hbox({
+                channel_labels(2),
+                di_tool_bits.component()->Render(),
+            }),
         });
 
         auto digital_section = hbox({
@@ -125,9 +144,12 @@ IOTab::IOTab(pvtui::App& app, const std::string& prefix)
         }) | border;
 
         auto analog_section = vbox({
+            text("Analog I/O") | bold | underlined,
+            separatorEmpty(),
             hbox({
-                text("           ") | size(WIDTH, EQUAL, 11),
+                separatorEmpty() | size(WIDTH, EQUAL, 11),
                 text("AO0") | bold | size(WIDTH, EQUAL, 12) | hcenter,
+                separatorEmpty(),
                 text("AO1") | bold | size(WIDTH, EQUAL, 12) | hcenter,
                 separatorEmpty(),
                 text("AI0") | bold | size(WIDTH, EQUAL, 12) | hcenter,
@@ -138,6 +160,7 @@ IOTab::IOTab(pvtui::App& app, const std::string& prefix)
                 ao_rbv0.component()->Render()
                     | rbv_style(ao_rbv0)
                     | size(WIDTH, EQUAL, 12),
+                separatorEmpty(),
                 ao_rbv1.component()->Render()
                     | rbv_style(ao_rbv1)
                     | size(WIDTH, EQUAL, 12),
@@ -154,6 +177,7 @@ IOTab::IOTab(pvtui::App& app, const std::string& prefix)
                 ao_voltage0.component()->Render()
                     | edit_style(ao_voltage0)
                     | size(WIDTH, EQUAL, 12),
+                separatorEmpty(),
                 ao_voltage1.component()->Render()
                     | edit_style(ao_voltage1)
                     | size(WIDTH, EQUAL, 12),
@@ -163,6 +187,7 @@ IOTab::IOTab(pvtui::App& app, const std::string& prefix)
                 ao_current0.component()->Render()
                     | edit_style(ao_current0)
                     | size(WIDTH, EQUAL, 12),
+                separatorEmpty(),
                 ao_current1.component()->Render()
                     | edit_style(ao_current1)
                     | size(WIDTH, EQUAL, 12),
@@ -174,11 +199,10 @@ IOTab::IOTab(pvtui::App& app, const std::string& prefix)
                 ? text("Connected") | color(Color::Green) | bold
                 : text("Disconnected") | color(Color::Red) | bold,
             separatorEmpty(),
-            digital_section,
+            digital_section | size(WIDTH, EQUAL, 32),
             separatorEmpty(),
-            text("Analog I/O") | bold | underlined,
-            analog_section,
-        }) | size(WIDTH, EQUAL, 62);
+            analog_section | size(WIDTH, EQUAL, 62),
+        });
     });
 
     Add(container);

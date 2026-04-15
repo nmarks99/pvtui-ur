@@ -1,9 +1,11 @@
 #include <chrono>
+#include <ctime>
 #include <ftxui/component/component.hpp>
 #include <pvtui/pvtui.hpp>
 
 #include "control.hpp"
 #include "dashboard.hpp"
+#include "gripper.hpp"
 #include "io.hpp"
 #include "status.hpp"
 
@@ -13,19 +15,26 @@ using namespace std::chrono_literals;
 
 int main(int argc, char *argv[]) {
 
-    pvtui::App app(argc, argv, {"--prefix"});
+    pvtui::App app(argc, argv);
 
     // PV names to monitor are passed as positional arguments
     auto pos_args = app.args.positional_args();
-    std::string prefix = app.args.param("--prefix");
+    if (pos_args.size() != 2) {
+        std::cout << "Usage: pvtui_sr <IOC prefix>\n";
+        return 1;
+    }
+    std::string prefix = pos_args[1];
 
     auto dashboard = Make<Dashboard>(app, prefix);
     auto status = Make<Status>(app, prefix);
     auto control = Make<Control>(app, prefix);
+    auto gripper = Make<Gripper>(app, prefix);
     auto io = Make<IOTab>(app, prefix);
 
+    Monitor<std::string> tod(app, prefix + "TOD");
+
     std::vector<std::string> tab_values {
-      "Control", "Status", "Dashboard", "I/O"
+      "Control", "Status", "Dashboard", "Gripper", "I/O"
     };
     int selected_tab = 0;
 
@@ -33,21 +42,26 @@ int main(int argc, char *argv[]) {
         control,
         status,
         dashboard,
+        gripper,
         io,
     }, &selected_tab);
 
     auto op = MenuOption::HorizontalAnimated();
     op.underline.SetAnimationDuration(100ms);
     auto container = Container::Vertical({
-        Menu(&tab_values, &selected_tab, op) | Renderer([&](Element inner){
-            return hbox({
-                inner,
-                filler(),
-                text(prefix)
+        Menu(&tab_values, &selected_tab, op),
+        Renderer([]{return separatorEmpty();}),
+        tab_container | flex,
+        Renderer([&]{
+            return vbox({
+                separator(),
+                hbox({
+                    text(" IOC Prefix: " + prefix),
+                    filler(),
+                    tod.component()->Render()
+                }),
             });
         }),
-        Renderer([]{return separatorEmpty();}),
-        tab_container
     });
 
     app.run(container);
