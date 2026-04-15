@@ -8,7 +8,7 @@ Status::Status(pvtui::App& app, const std::string& prefix)
     : prefix(prefix),
     reconnect(app, prefix+"Receive:Reconnect.PROC",   "  Connect   "),
     disconnect(app, prefix+"Receive:Disconnect.PROC", " Disconnect "),
-    safety_bits(app, prefix+"Receive:SafetyStatusBits.VAL", 11, Color::Yellow),
+    safety_bits(app, prefix+"Receive:SafetyStatusBits.VAL", {0, 11}, Color::Yellow),
     uptime(app, prefix+"Receive:ControllerTimestamp.VAL"),
     runtime_state(app, prefix+"Receive:RuntimeState.VAL"),
     connected(app, prefix+"Receive:Connected.RVAL"),

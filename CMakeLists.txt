@@ -16,5 +16,6 @@ add_executable(pvtui_ur
     src/dashboard.cpp
     src/status.cpp
     src/control.cpp
+    src/io.cpp
 )
 target_link_libraries(pvtui_ur PRIVATE pvtui::pvtui)

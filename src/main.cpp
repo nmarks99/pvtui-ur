@@ -2,9 +2,10 @@
 #include <ftxui/component/component.hpp>
 #include <pvtui/pvtui.hpp>
 
-#include "dashboard.hpp"
-#include "status.hpp"
 #include "control.hpp"
+#include "dashboard.hpp"
+#include "io.hpp"
+#include "status.hpp"
 
 using namespace ftxui;
 using namespace pvtui;
@@ -21,9 +22,10 @@ int main(int argc, char *argv[]) {
     auto dashboard = Make<Dashboard>(app, prefix);
     auto status = Make<Status>(app, prefix);
     auto control = Make<Control>(app, prefix);
+    auto io = Make<IOTab>(app, prefix);
 
     std::vector<std::string> tab_values {
-      "Control", "Status", "Dashboard"
+      "Control", "Status", "Dashboard", "I/O"
     };
     int selected_tab = 0;
 
@@ -31,6 +33,7 @@ int main(int argc, char *argv[]) {
         control,
         status,
         dashboard,
+        io,
     }, &selected_tab);
 
     auto op = MenuOption::HorizontalAnimated();
