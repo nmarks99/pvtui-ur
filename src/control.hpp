@@ -52,4 +52,5 @@ class Control : public ftxui::ComponentBase {
     pvtui::ChoiceWidget teach;
     pvtui::Monitor<int> connected;
     pvtui::Monitor<pvtui::PVEnum> moving;
+    pvtui::SliderWidget speed_slider;
 };

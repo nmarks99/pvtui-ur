@@ -81,7 +81,8 @@ Control::Control(pvtui::App& app, const std::string& prefix) : prefix(prefix),
     tcp_offset_yaw(app, prefix + "Control:TCPOffset_Yaw.VAL", PVPutType::Double),
     teach(app, prefix + "Control:TeachMode.VAL", ChoiceStyle::Horizontal),
     connected(app, prefix + "Control:Connected.RVAL"),
-    moving(app, prefix + "Control:Moving.VAL")
+    moving(app, prefix + "Control:Moving.VAL"),
+    speed_slider(app, prefix + "IO:SpeedSlider.VAL", {0.0, 1.0, 0.05}, Color::RGB(179, 194, 227), Color::GrayDark)
 {
     auto joints_top = Container::Horizontal({
         auto_movej.component(),
@@ -189,6 +190,7 @@ Control::Control(pvtui::App& app, const std::string& prefix) : prefix(prefix),
         reupload_ctrl_script.component(),
         teach.component(),
         tcp_offset_container,
+        speed_slider.component(),
         stop.component()
     }) | Renderer([this, tcp_offset_container](Element){
         return vbox({
@@ -215,7 +217,8 @@ Control::Control(pvtui::App& app, const std::string& prefix) : prefix(prefix),
             tcp_offset_container->Render(),
             separatorEmpty(),
             hbox({
-                text("<SPEED SLIDER GOES HERE>"),
+                text("Speed: "),
+                speed_slider.component()->Render(),
                 separatorEmpty(),
                 stop.component()->Render() | bgcolor(Color::Red) | color(Color::Yellow),
                 filler(),
