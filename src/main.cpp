@@ -56,7 +56,8 @@ int main(int argc, char *argv[]) {
             return vbox({
                 separator(),
                 hbox({
-                    text(" IOC Prefix: " + prefix),
+                    separatorEmpty(),
+                    text(prefix),
                     filler(),
                     tod.component()->Render()
                 }),
