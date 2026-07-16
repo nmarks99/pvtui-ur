@@ -21,9 +21,9 @@ Status::Status(pvtui::App& app, const std::string& prefix)
     pose1(app, prefix+"Receive:PoseX.VAL"),
     pose2(app, prefix+"Receive:PoseY.VAL"),
     pose3(app, prefix+"Receive:PoseZ.VAL"),
-    pose4(app, prefix+"Receive:PoseRoll.VAL"),
-    pose5(app, prefix+"Receive:PosePitch.VAL"),
-    pose6(app, prefix+"Receive:PoseYaw.VAL")
+    pose4(app, prefix+"Receive:PoseRx.VAL"),
+    pose5(app, prefix+"Receive:PoseRy.VAL"),
+    pose6(app, prefix+"Receive:PoseRz.VAL")
 {
 
     auto container = Container::Vertical({
@@ -74,9 +74,9 @@ Status::Status(pvtui::App& app, const std::string& prefix)
                     labelled_rbv(pose1, "    X: "),
                     labelled_rbv(pose2, "    Y: "),
                     labelled_rbv(pose3, "    Z: "),
-                    labelled_rbv(pose4, " Roll: "),
-                    labelled_rbv(pose5, "Pitch: "),
-                    labelled_rbv(pose6, "  Yaw: ")
+                    labelled_rbv(pose4, " Rx: "),
+                    labelled_rbv(pose5, "Ry: "),
+                    labelled_rbv(pose6, "  Rz: ")
                 }),
 
                 separatorEmpty(),
